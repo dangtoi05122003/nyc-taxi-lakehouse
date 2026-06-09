@@ -6,7 +6,7 @@ from io import BytesIO
 from bs4 import BeautifulSoup
 logger = get_logger(__name__)
 setting =load_setting()
-class bronze:
+class nyc:
     def __init__(self, config_path):
         self.config = load_yaml(config_path)
         self.client =minioService()
@@ -33,7 +33,7 @@ class bronze:
             if not year or year < 2024:
                 continue
             file_name = file_url.split("/")[-1]
-            bronze_path = f"bronze/year={year}/month={month}/{file_name}"
+            bronze_path = f"bronze/nyc/year={year}/month={month}/{file_name}"
             logger.info(f"Processing: {bronze_path}")
             try:
                 res = requests.get(file_url, stream=True, headers={"User-Agent": "Mozilla/5.0"})
@@ -50,5 +50,5 @@ class bronze:
             except Exception as e:
                 logger.error("Error file %s: %s", file_name, e)
 if __name__ == "__main__":
-    app = bronze(config_path="/opt/airflow/config/bronze.yml")
+    app = nyc(config_path="/opt/airflow/config/bronze.yml")
     app.ingest()
