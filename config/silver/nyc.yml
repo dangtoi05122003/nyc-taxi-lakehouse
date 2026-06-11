@@ -1,0 +1,32 @@
+tables:
+  fhv_tripdata:
+    process:
+      - calculations:
+          duration_seconds: unix_timestamp(dropOff_datetime) - unix_timestamp(pickup_datetime)
+      - refinement:
+          drop_columns: [SR_Flag, Affiliated_base_number]
+          filters: "pickup_datetime IS NOT NULL AND dropOff_datetime IS NOT NULL AND pickup_datetime < dropOff_datetime"
+  fhvhv_tripdata:
+    process:
+      - calculations:
+          duration_seconds: unix_timestamp(dropOff_datetime) - unix_timestamp(pickup_datetime)
+      - refinement:
+          drop_columns: [hvfhs_license_num, dispatching_base_num, originating_base_num]
+          filters: "pickup_datetime IS NOT NULL AND dropOff_datetime IS NOT NULL AND pickup_datetime < dropOff_datetime"
+  green_tripdata:
+    process:
+      - calculations:
+          duration_seconds: unix_timestamp(lpep_dropoff_datetime) - unix_timestamp(lpep_pickup_datetime)
+      - refinement:
+          drop_columns: [ehail_fee, store_and_fwd_flag]
+          filters: "lpep_pickup_datetime IS NOT NULL AND lpep_dropoff_datetime IS NOT NULL AND lpep_pickup_datetime < lpep_dropoff_datetime"
+  yellow_tripdata:
+    process:
+      - calculations:
+          duration_seconds: unix_timestamp(tpep_dropoff_datetime) - unix_timestamp(tpep_pickup_datetime)
+      - refinement:
+          drop_columns: [store_and_fwd_flag]
+          filters: "tpep_pickup_datetime IS NOT NULL AND tpep_dropoff_datetime IS NOT NULL AND tpep_pickup_datetime < tpep_dropoff_datetime"
+path:
+  basePath: s3a://nyc-taxi/bronze/nyc/
+  outputPath: s3a://nyc-taxi/silver/nyc

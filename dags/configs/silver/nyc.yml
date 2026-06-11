@@ -1,0 +1,16 @@
+general:
+  default_args:
+    owner: 'nyc'
+    retries: 5
+    retry_delay: 5
+  dag_configs:
+    - dag_id: "silver_nyc"
+      dag_type: "nyc"
+      schedule_interval: null
+      max_active_runs: 1
+      start_date: "2025-05-05"
+      catchup: false
+      is_paused_upon_creation: false
+      tasks:
+        - task_id: nyc
+          script_path: "/opt/spark/src/transform/nyc.py"
