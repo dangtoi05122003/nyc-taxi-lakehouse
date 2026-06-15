@@ -1,0 +1,10 @@
+tables:
+  zones:
+    columns:
+      LocationID: varchar
+      Borough: varchar
+      Zone: varchar
+      service_zone: varchar
+    partition_by: []
+path:
+  source: "s3a://nyc-taxi/bronze/"

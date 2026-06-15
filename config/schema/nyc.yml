@@ -1,0 +1,89 @@
+tables:
+  fhv_tripdata:
+    columns:
+      dispatching_base_num: varchar
+      pickup_datetime: timestamp
+      dropOff_datetime: timestamp
+      PUlocationID: integer
+      DOlocationID: integer
+      duration_seconds: bigint
+      year: integer
+      month: integer
+    partition_by:
+      - year
+      - month
+  fhvhv_tripdata:
+    columns:
+      dispatching_base_num: varchar
+      pickup_datetime: timestamp
+      dropOff_datetime: timestamp
+      PUlocationID: integer
+      DOlocationID: integer
+      trip_miles: double
+      trip_time: integer
+      duration_seconds: bigint
+      base_passenger_fare: double
+      tolls: double
+      bcf: double
+      sales_tax: double
+      congestion_surcharge: double
+      airport_fee: double
+      tips: double
+      driver_pay: double
+      year: integer
+      month: integer
+    partition_by:
+      - year
+      - month
+  green_tripdata:
+    columns:
+      VendorID: integer
+      pickup_datetime: timestamp
+      dropoff_datetime: timestamp
+      passenger_count: integer
+      trip_distance: double
+      PULocationID: integer
+      DOLocationID: integer
+      payment_type: integer
+      fare_amount: double
+      tip_amount: double
+      tolls_amount: double
+      extra: double
+      mta_tax: double
+      improvement_surcharge: double
+      congestion_surcharge: double
+      airport_fee: double
+      total_amount: double
+      duration_seconds: bigint
+      year: integer
+      month: integer
+    partition_by:
+      - year
+      - month
+  yellow_tripdata:
+    columns:
+      VendorID: integer
+      pickup_datetime: timestamp
+      dropoff_datetime: timestamp
+      passenger_count: integer
+      trip_distance: double
+      PULocationID: integer
+      DOLocationID: integer
+      payment_type: integer
+      fare_amount: double
+      tip_amount: double
+      tolls_amount: double
+      extra: double
+      mta_tax: double
+      improvement_surcharge: double
+      congestion_surcharge: double
+      airport_fee: double
+      total_amount: double
+      duration_seconds: bigint
+      year: integer
+      month: integer
+    partition_by:
+      - year
+      - month
+path:
+  source: "s3a://nyc-taxi/silver/nyc/"
