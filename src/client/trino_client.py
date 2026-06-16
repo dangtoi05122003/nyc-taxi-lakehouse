@@ -25,8 +25,9 @@ class TrinoClient:
             options = ""
             if format.lower() == "csv":
                 options = ", skip_header_line_count = 1"
+            self.drop_table(tablename)
             self.cur.execute(f"""
-                CREATE TABLE IF NOT EXISTS {setting.TRINO_CATALOG}.{setting.TRINO_SCHEMA}.{tablename} (
+                CREATE TABLE {setting.TRINO_CATALOG}.{setting.TRINO_SCHEMA}.{tablename} (
                     {column}
                 )
                 WITH (
@@ -58,7 +59,7 @@ class TrinoClient:
         logger.info(f"Dropping table: {tablename}")
         try:
             self.cur.execute(f"""
-                DROP TABLE IF EXISTS {setting.TRINO_SCHEMA}.{tablename}
+                DROP TABLE IF EXISTS {setting.TRINO_CATALOG}.{setting.TRINO_SCHEMA}.{tablename}
             """)
         except Exception:
             logger.exception(f"Failed to drop table: {tablename}")

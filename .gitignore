@@ -6,3 +6,4 @@ notebooks
 *.properties
 *.config
 *.conf
+profiles.yml

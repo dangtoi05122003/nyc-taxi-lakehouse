@@ -38,8 +38,8 @@ tables:
   green_tripdata:
     columns:
       VendorID: integer
-      pickup_datetime: timestamp
-      dropoff_datetime: timestamp
+      lpep_pickup_datetime: timestamp
+      lpep_dropoff_datetime: timestamp
       passenger_count: integer
       trip_distance: double
       PULocationID: integer
@@ -63,8 +63,8 @@ tables:
   yellow_tripdata:
     columns:
       VendorID: integer
-      pickup_datetime: timestamp
-      dropoff_datetime: timestamp
+      tpep_pickup_datetime: timestamp
+      tpep_dropoff_datetime: timestamp
       passenger_count: integer
       trip_distance: double
       PULocationID: integer
