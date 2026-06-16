@@ -6,6 +6,9 @@ RUN apt-get update && apt-get install -y python3-pip && \
 ENV SPARK_HOME=/opt/spark
 ENV PATH="$PATH:$SPARK_HOME/bin:$SPARK_HOME/sbin"
 WORKDIR /opt/spark
+RUN mkdir -p /home/spark/.ivy2/cache && \
+    chown -R spark:spark /home/spark/.ivy2
+ENV SPARK_SUBMIT_OPTS="-Dspark.jars.ivy=/tmp/.ivy2"
 RUN curl -L \
     https://repo1.maven.org/maven2/org/apache/hadoop/hadoop-aws/3.3.4/hadoop-aws-3.3.4.jar \
     -o $SPARK_HOME/jars/hadoop-aws-3.3.4.jar
