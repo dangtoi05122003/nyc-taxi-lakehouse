@@ -14,15 +14,6 @@ WITH trips as (
         total_amount,
         tip_amount
     from {{ ref('fact_green_trip') }}
-
-    union all
-
-    select
-        pickup_datetime,
-        'fhvhv' as trip_type,
-        null as total_amount,
-        tips as tip_amount
-    from {{ ref('fact_fhvhv_trip') }}
 )
 
 select
