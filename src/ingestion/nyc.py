@@ -4,6 +4,7 @@ import requests
 import re
 from io import BytesIO
 from bs4 import BeautifulSoup
+from concurrent.futures import ThreadPoolExecutor, as_completed
 logger = get_logger(__name__)
 setting =load_setting()
 class nyc:
@@ -27,28 +28,33 @@ class nyc:
         if not match:
             return None, None
         return int(match.group(1)), match.group(2)
-    def ingest(self):
-        for file_url in self.get_data():
-            year, month = self.extract_year_month(file_url)
-            if not year or year < 2024:
-                continue
-            file_name = file_url.split("/")[-1]
-            bronze_path = f"bronze/nyc/year={year}/month={month}/{file_name}"
-            logger.info(f"Processing: {bronze_path}")
-            try:
-                res = requests.get(file_url, stream=True, headers={"User-Agent": "Mozilla/5.0"})
-                res.raise_for_status()
-                data = BytesIO(res.content)
-                self.client.put_object(
-                    setting.BUCKET_NAME,
-                    bronze_path,
-                    data,
-                    length=len(res.content),
-                    content_type="application/octet-stream"
-                )
-                logger.info("Uploaded: %s", bronze_path)
-            except Exception as e:
-                logger.error("Error file %s: %s", file_name, e)
+    def ingest(self, file_url):
+        year, month = self.extract_year_month(file_url)
+        if not year or year < 2024:
+            return
+        file_name = file_url.split("/")[-1]
+        bronze_path = f"bronze/nyc/year={year}/month={month}/{file_name}"
+        logger.info(f"Processing: {bronze_path}")
+        try:
+            res = requests.get(file_url, stream=True, headers={"User-Agent": "Mozilla/5.0"})
+            res.raise_for_status()
+            data = BytesIO(res.content)
+            self.client.put_object(
+                setting.BUCKET_NAME,
+                bronze_path,
+                data,
+                length=len(res.content),
+                content_type="application/octet-stream"
+            )
+            logger.info("Uploaded: %s", bronze_path)
+        except Exception as e:
+            logger.error("Error file %s: %s", file_name, e)
+    def run(self):
+        file_urls = self.get_data()
+        with ThreadPoolExecutor(max_workers=5) as executor:
+            futures = [executor.submit(self.ingest, file_url) for file_url in file_urls]
+            for future in as_completed(futures):
+                future.result()
 if __name__ == "__main__":
     app = nyc(config_path="/opt/airflow/config/bronze.yml")
-    app.ingest()
+    app.run()
