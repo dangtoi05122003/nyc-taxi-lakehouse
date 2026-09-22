@@ -1,6 +1,8 @@
 from utils import get_logger, load_yaml
 from utils.spark_session import get_spark
 import pyspark.sql.functions as F
+from functools import reduce
+from typing import List
 logger = get_logger(__name__)
 
 class nyc:
@@ -11,15 +13,21 @@ class nyc:
         for step in process:
             if "refinement" in step:
                 refinement = step["refinement"]
-                if "drop_columns" in refinement:
-                    for col in refinement["drop_columns"]:
-                        df = df.drop(col)
-                if "filters" in refinement:
-                    df = df.filter(F.expr(refinement["filters"]))
+                drop_columns = refinement.get("drop_columns", [])
+                if drop_columns:
+                    df = df.drop(*drop_columns)
+                condition = self.build_filter_condition(refinement["filters"])
+                if condition is not None:
+                    df = df.filter(condition)
             if "calculations" in step:
                 for col, cal in step['calculations'].items():
                     df = df.withColumn(col, F.expr(cal))
         return df
+    def build_filter_condition(self, filters: List[str]):
+        if not filters:
+            return None
+        conditions = map(F.expr, filters)
+        return reduce(lambda left, right: left & right, conditions)
     def run(self):
         tables = self.config['tables']
         basePath = self.config['path']['basePath']
