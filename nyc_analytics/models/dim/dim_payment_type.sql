@@ -1,6 +1,12 @@
-SELECT 1 AS payment_type, 'Credit Card' AS description, TRUE AS is_valid UNION ALL
-SELECT 2, 'Cash', TRUE UNION ALL
-SELECT 3, 'No Charge', TRUE UNION ALL
-SELECT 4, 'Dispute', TRUE UNION ALL
-SELECT 5, 'Unknown', TRUE UNION ALL
-SELECT -1, 'Missing', TRUE
+with base as (
+    SELECT 0 AS payment_type, 'Flex Fare trip' as payment_type_name UNION ALL
+    SELECT 1 AS payment_type, 'Credit Card' AS payment_type_name UNION ALL
+    SELECT 2 AS payment_type, 'Cash' AS payment_type_name UNION ALL
+    SELECT 3 AS payment_type, 'No Charge' AS payment_type_name UNION ALL
+    SELECT 4 AS payment_type, 'Dispute' AS payment_type_name UNION ALL
+    SELECT 5 AS payment_type, 'Unknown' AS payment_type_name
+)
+select
+    payment_type as payment_type_id,
+    payment_type_name
+from base

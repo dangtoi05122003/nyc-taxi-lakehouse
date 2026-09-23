@@ -1,2 +1,23 @@
-select *
+select
+    cast(date_format(pickup_datetime, '%Y%m%d') as integer) as date_key,
+    vendor_id,
+    coalesce(rate_code_id, 99) as rate_code_id,
+    payment_type as payment_type_id,
+    pickup_location_id,
+    dropoff_location_id,
+    pickup_datetime,
+    dropoff_datetime,
+    duration_seconds,
+    passenger_count,
+    trip_distance,
+    store_and_fwd_flag,
+    fare_amount,
+    extra,
+    mta_tax,
+    tip_amount,
+    tolls_amount,
+    improvement_surcharge,
+    congestion_surcharge,
+    airport_fee,
+    total_amount
 from {{ ref('stg_yellow_tripdata') }}

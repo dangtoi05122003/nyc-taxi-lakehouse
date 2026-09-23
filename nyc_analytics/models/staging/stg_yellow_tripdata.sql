@@ -1,7 +1,22 @@
 select
-    *,
     vendorid as vendor_id,
+    tpep_pickup_datetime as pickup_datetime,
+    tpep_dropoff_datetime as dropoff_datetime,
+    passenger_count,
+    trip_distance,
+    rate_code_id,
+    store_and_fwd_flag,
     pulocationid as pickup_location_id,
-    dolocationid as dropoff_location_id
+    dolocationid as dropoff_location_id,
+    payment_type,
+    fare_amount,
+    extra,
+    mta_tax,
+    tip_amount,
+    tolls_amount,
+    improvement_surcharge,
+    total_amount,
+    congestion_surcharge,
+    Airport_fee,
+    duration_seconds
 from {{ source('nyc_taxi', 'yellow_tripdata') }}
-WHERE tpep_pickup_datetime >= TIMESTAMP '2024-01-01 00:00:00'
