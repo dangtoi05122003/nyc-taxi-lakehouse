@@ -7,6 +7,7 @@ tables:
       PUlocationID: integer
       DOlocationID: integer
       duration_seconds: bigint
+      Affiliated_base_number: varchar
       year: integer
       month: integer
     partition_by:
@@ -21,6 +22,15 @@ tables:
       DOlocationID: integer
       trip_miles: double
       trip_time: integer
+      request_datetime: timestamp
+      on_scene_datetime: timestamp
+      shared_request_flag: varchar
+      shared_match_flag: varchar
+      hvfhs_license_num: varchar
+      originating_base_num: varchar
+      access_a_ride_flag: varchar
+      wav_request_flag: varchar
+      wav_match_flag: varchar
       duration_seconds: bigint
       base_passenger_fare: double
       tolls: double
@@ -44,6 +54,9 @@ tables:
       trip_distance: double
       PULocationID: integer
       DOLocationID: integer
+      rate_code_id: integer
+      store_and_fwd_flag: varchar
+      trip_type: integer
       payment_type: integer
       fare_amount: double
       tip_amount: double
@@ -70,6 +83,8 @@ tables:
       PULocationID: integer
       DOLocationID: integer
       payment_type: integer
+      rate_code_id: integer
+      store_and_fwd_flag: varchar
       fare_amount: double
       tip_amount: double
       tolls_amount: double

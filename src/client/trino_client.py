@@ -16,7 +16,10 @@ class TrinoClient:
         )
         logger.info("Trino connected")
         return conn.cursor()
+    def create_schema(self):
+        self.cur.execute(f"create schema if not exists {setting.TRINO_CATALOG}.{setting.TRINO_SCHEMA}")
     def create_table(self, tablename, columns, partition_by, path, format):
+        self.create_schema()
         logger.info(f"Creating table: {tablename}")
         try:
             location = f"{path}/{tablename}"
